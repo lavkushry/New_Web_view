@@ -1,0 +1,66 @@
+<!--I want to Fetch User Location and Display it on the Map using MapKit JS. I have tried the following code but it is not working. Can anyone help me to fix this issue?-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MapKit JS Example</title>
+  <script src="https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js"></script>
+  <script>
+    mapkit.init({
+      authorizationCallback: function (done) {
+        // Replace with your JWT token generation logic
+        done('eyJhbGciOiJFUzI1NiIsImtpZCI6IlJQTExYWDUyVVciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI3NDQyMjhKRFQ0IiwiaWF0IjoxNzE4Njg4NTUxLCJleHB0IjoxNzM0MjQwNTUxfQ.QWxCLYVK-EJ_Pos2i4Lmz4i8MXGREq9kiB-i6g_pTx90NFJooubv8Muxo4VFm3DO28Xl0y_vmHifAWh5O2EfzA');
+      }
+    });
+
+    var map;
+    var currentZoomLevel = 0.1;
+    var center = new mapkit.Coordinate(37.7749, -122.4194); // Default coordinates (San Francisco)
+    var marker;
+
+    function initMap() {
+      map = new mapkit.Map("map");
+      map.region = new mapkit.CoordinateRegion(center, new mapkit.CoordinateSpan(currentZoomLevel, currentZoomLevel));
+    }
+
+    function addMarker(coordinate) {
+      if (marker) {
+        marker.coordinate = coordinate;
+      } else {
+        marker = new mapkit.MarkerAnnotation(coordinate, {
+          color: "#0000FF", // Blue color for the marker
+          title: "Current Location"
+        });
+        map.addAnnotation(marker);
+      }
+    }
+
+    function updateMapLocation(lat, lng) {
+      center = new mapkit.Coordinate(lat, lng);
+      map.region = new mapkit.CoordinateRegion(center, new mapkit.CoordinateSpan(currentZoomLevel, currentZoomLevel));
+      addMarker(center);
+    }
+
+    function setZoomLevel(zoomLevel) {
+      currentZoomLevel = zoomLevel;
+      map.region = new mapkit.CoordinateRegion(center, new mapkit.CoordinateSpan(currentZoomLevel, currentZoomLevel));
+    }
+
+    document.addEventListener("DOMContentLoaded", initMap);
+  </script>
+  <style>
+    #map {
+      width: 100%;
+      height: 100vh;
+    }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+</body>
+
+</html>
